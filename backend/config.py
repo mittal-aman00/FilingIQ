@@ -41,5 +41,5 @@ EMBEDDING_MODEL = "models/gemini-embedding-001"
 CHUNKS_PATH = str(ROOT / "data" / "chunks.jsonl")
 
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
-LLM_PROVIDER = "groq"   # "groq" or "gemini" — this is the ONLY line you
-                        # change to switch generation providers everywhere
+# Set LLM_PROVIDER=groq|gemini in env (Render / .env). Default: groq.
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "groq").strip().lower()

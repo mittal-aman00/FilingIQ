@@ -21,6 +21,7 @@ STARTUP
   Same objects evaluate.py uses — live and eval stay aligned.
 """
 
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -42,15 +43,23 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# Allow the Vite dev server (and common local previews) to call /ask
+# Local Vite + production Vercel. Extra origins via FRONTEND_ORIGIN (comma-separated).
+_cors_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
+    "https://filing-iq-seven.vercel.app",
+]
+_cors_origins += [
+    o.strip()
+    for o in os.environ.get("FRONTEND_ORIGIN", "").split(",")
+    if o.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:4173",
-        "http://127.0.0.1:4173",
-    ],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
