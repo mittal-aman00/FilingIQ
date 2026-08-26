@@ -1,0 +1,22 @@
+# Render Blueprint — forces Python 3.12 (native default is 3.14, which breaks langchain-pinecone)
+services:
+  - type: web
+    name: filingiq
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: LLM_PROVIDER
+        value: groq
+      - key: FRONTEND_ORIGIN
+        value: https://filing-iq-seven.vercel.app
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
