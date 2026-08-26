@@ -26,18 +26,19 @@
 1. [One-sentence pitch](#1--one-sentence-pitch)
 2. [The problem this solves](#2--the-problem-this-solves)
 3. [What FilingIQ does (functional)](#3--what-filingiq-does-functional)
-4. [What FilingIQ deliberately does NOT do](#4--what-filingiq-deliberately-does-not-do)
-5. [End-to-end system flow](#5--end-to-end-system-flow)
-6. [Technology stack](#6--technology-stack)
-7. [File-by-file technical map](#7--file-by-file-technical-map)
-8. [Runtime request path (`/ask`)](#8--runtime-request-path-ask)
-9. [Ingestion path (one-time / when PDFs change)](#9--ingestion-path-one-time--when-pdfs-change)
-10. [Project structure](#10--project-structure)
-11. [What `.gitignore` excludes (and why)](#11--what-gitignore-excludes-and-why)
-12. [Quick start](#12--quick-start)
-13. [Evaluation harness](#13--evaluation-harness)
-14. [Security & production notes](#14--security--production-notes)
-15. [Interview / portfolio talking points](#15--interview--portfolio-talking-points)
+4. [See it in action (live proofs)](#4--see-it-in-action-live-proofs)
+5. [What FilingIQ deliberately does NOT do](#5--what-filingiq-deliberately-does-not-do)
+6. [End-to-end system flow](#6--end-to-end-system-flow)
+7. [Technology stack](#7--technology-stack)
+8. [File-by-file technical map](#8--file-by-file-technical-map)
+9. [Runtime request path (`/ask`)](#9--runtime-request-path-ask)
+10. [Ingestion path (one-time / when PDFs change)](#10--ingestion-path-one-time--when-pdfs-change)
+11. [Project structure](#11--project-structure)
+12. [What `.gitignore` excludes (and why)](#12--what-gitignore-excludes-and-why)
+13. [Quick start](#13--quick-start)
+14. [Evaluation harness](#14--evaluation-harness)
+15. [Security & production notes](#15--security--production-notes)
+16. [Interview / portfolio talking points](#16--interview--portfolio-talking-points)
 
 ---
 
@@ -93,7 +94,74 @@ FilingIQ is built to solve those five — not to opine on whether to buy NVIDIA 
 
 ---
 
-## 4. What FilingIQ deliberately does NOT do
+## 4. See it in action (live proofs)
+
+Screenshots below are from the **deployed** stack (Vercel frontend + Render FastAPI), not mocks.
+
+### 4.1 — Login: enter the research terminal
+
+![FilingIQ login screen](proofs/01-login.png)
+
+**What you’re looking at**
+
+| Element | Why it matters |
+|---------|----------------|
+| **FILINGIQ** brand + “NVIDIA 10-K Research Terminal” | Product identity up front — Bloomberg-style desk, not a generic chatbot skin |
+| **Analyst ID / Access key** | Mock auth gate for demos (any email/password unlocks) |
+| **ENTER TERMINAL** | Single CTA into the workspace |
+| **NVDA · FY2024–FY2026** | Corpus scope is visible before you ask a single question |
+| **Demo mode note** | Sets expectations: portfolio demo, not enterprise SSO |
+
+> Functionally: this is the front door. Technically: session is stored in browser `localStorage` — the FastAPI backend is not involved until you reach the workspace and `/health` / `/ask` are called.
+
+---
+
+### 4.2 — Workspace home: three panels, API live
+
+![FilingIQ terminal home with suggested questions](proofs/02-terminal-home.png)
+
+**Layout (left → center → right)**
+
+| Panel | Role |
+|-------|------|
+| **Threads** | Chat history, **+ New**, export JSON; corpus label (NVDA 10-K FY24–26) |
+| **Query window** | Empty-state prompt + starter questions + Ask composer |
+| **Evidence** | Fills after an assistant reply (intent, citations, verification, raw payload) |
+
+**Status bar:** green **API LIVE** plus loaded fiscal years means `GET /health` succeeded against the Render backend — frontend and API are connected.
+
+**Starter questions** intentionally stress different pipeline paths:
+
+1. Lookup (table figure) — revenue FY2025  
+2. Comparison (multi-hop + arithmetic) — operating income FY24→FY25  
+3. Explanation (prose / Risk Factors) — export controls  
+4. Keyword / notes retrieval — “Note 14” goodwill  
+
+---
+
+### 4.3 — Verified answer: end-to-end proof
+
+![FilingIQ verified revenue answer with evidence panel](proofs/03-verified-answer.png)
+
+**Question:** *“What was NVIDIA total revenue in fiscal year 2025?”*
+
+**What the screenshot proves**
+
+| Signal | Meaning |
+|--------|---------|
+| **API LIVE** | Backend still healthy under load |
+| Answer **$130,497 million** | Grounded figure from the filing, not model world-knowledge |
+| Inline citation `[FY2025, p.84, …]` | Traceable page/section for the claim |
+| Badges **SINGLE** + **VERIFIED** | Single-year lookup path; numeric verifier passed |
+| **Evidence → Interpreted intent** | `lookup` · metric `total revenue` · year `2025` |
+| **Evidence → Citations** | Same structured cite the UI can audit |
+| **Evidence → Raw payload** | Full JSON from `POST /ask` (`type`, `intent`, `answer`, `verified`, `citations`) |
+
+> This is the glass-box moment: the analyst sees not only the number, but **how the system interpreted the question and where the number came from.** That is the difference between a demo chatbot and a research tool.
+
+---
+
+## 5. What FilingIQ deliberately does NOT do
 
 - ❌ Stock picks, price targets, or forward-looking forecasts
 - ❌ Answers from model “world knowledge” about NVIDIA outside the provided filings
@@ -104,9 +172,9 @@ This scope boundary is a **product feature**, not a missing feature.
 
 ---
 
-## 5. End-to-end system flow
+## 6. End-to-end system flow
 
-### 5.1 Big picture
+### 6.1 Big picture
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -140,7 +208,7 @@ This scope boundary is a **product feature**, not a missing feature.
 └─────────────────────┘
 ```
 
-### 5.2 Two indexes, one source of truth
+### 6.2 Two indexes, one source of truth
 
 | Index | Where it lives | Rebuilt when? |
 |-------|----------------|---------------|
@@ -154,7 +222,7 @@ This scope boundary is a **product feature**, not a missing feature.
 
 ---
 
-## 6. Technology stack
+## 7. Technology stack
 
 ### Parsing & chunking
 | Tool | Role |
@@ -196,7 +264,7 @@ This scope boundary is a **product feature**, not a missing feature.
 
 ---
 
-## 7. File-by-file technical map
+## 8. File-by-file technical map
 
 Use this section when you return months later and need to explain *exactly* what each file owns.
 
@@ -254,7 +322,7 @@ Use this section when you return months later and need to explain *exactly* what
 
 ---
 
-## 8. Runtime request path (`/ask`)
+## 9. Runtime request path (`/ask`)
 
 ```
 User types question in ChatPanel
@@ -300,7 +368,7 @@ classify_query()                     ← query_understanding.py (LLM, temperatur
 
 ---
 
-## 9. Ingestion path (one-time / when PDFs change)
+## 10. Ingestion path (one-time / when PDFs change)
 
 ```
 data/raw/nvda_FY2024.pdf
@@ -330,12 +398,16 @@ At API start: load_indexes()  ← indexes.py
 
 ---
 
-## 10. Project structure
+## 11. Project structure
 
 ```
 FilingIQ/
 ├── README.md                          ← you are here
 ├── .gitignore
+├── proofs/                            ← live UI screenshots for README
+│   ├── 01-login.png
+│   ├── 02-terminal-home.png
+│   └── 03-verified-answer.png
 ├── data/
 │   ├── raw/                           ← PDFs (ignored; download locally)
 │   │   ├── nvda_FY2024.pdf
@@ -361,7 +433,7 @@ FilingIQ/
 
 ---
 
-## 11. What `.gitignore` excludes (and why)
+## 12. What `.gitignore` excludes (and why)
 
 Read this before cloning or interviewing — missing these files is **intentional**.
 
@@ -386,7 +458,7 @@ Read this before cloning or interviewing — missing these files is **intentiona
 
 ---
 
-## 12. Quick start
+## 13. Quick start
 
 ### Prerequisites
 
@@ -443,7 +515,7 @@ Open **http://localhost:5173** — sign in with any email/password.
 
 ---
 
-## 13. Evaluation harness
+## 14. Evaluation harness
 
 `backend/evaluate.py` runs the **same code path as `/ask`** over a golden set and reports:
 
@@ -459,7 +531,7 @@ python evaluate.py
 
 ---
 
-## 14. Security & production notes
+## 15. Security & production notes
 
 **Already in place:**
 
@@ -477,6 +549,14 @@ python evaluate.py
 - Pin `requirements.txt` versions
 - Do not commit live API keys; rotate any key that ever leaked
 - Optionally add PDF download script instead of shipping filings
+
+---
+
+## 16. Interview / portfolio talking points
+
+Use this paragraph when explaining the project months later:
+
+> I built FilingIQ — a financial filing analysis system over three years of NVIDIA SEC 10‑Ks. The hard part isn’t “add a vector DB.” Financial meaning lives in tables that naive PDF chunking destroys, so I benchmarked parsers, kept each table as an atomic chunk with section context, and stamped fiscal-year metadata for hard filters. Questions go through intent extraction so period ambiguity cannot silently answer from the wrong year. Retrieval is hybrid BM25 + dense vectors with reciprocal rank fusion (FlashRank optional on small hosts). Every number is verified against retrieved context; arithmetic for YoY deltas runs in Python with `Decimal`; citations must map to retrieved pages; and the system refuses rather than guesses. The FastAPI `/ask` path is mirrored by an evaluation harness, and a Bloomberg-style React UI (deployed on Vercel, API on Render) exposes intent, citations, verification, and comparison math for analyst trust.
 
 ---
 
