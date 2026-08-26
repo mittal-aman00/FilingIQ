@@ -21,8 +21,14 @@ export async function askQuestion(question) {
     body: JSON.stringify({ question }),
   })
   if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(text || `Request failed (${res.status})`)
+    let detail = ''
+    try {
+      const data = await res.json()
+      detail = data.detail || data.error || JSON.stringify(data)
+    } catch {
+      detail = await res.text().catch(() => '')
+    }
+    throw new Error(detail || `Request failed (${res.status})`)
   }
   return res.json()
 }

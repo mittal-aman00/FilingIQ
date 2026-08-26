@@ -88,26 +88,36 @@ async def ask(req: AskRequest):
     Routes comparisons through Day 8; everything else through single-pass
     retrieval + Day 6/7 guardrails (including unsupported → refusal).
     """
-    intent = classify_query(req.question)
+    try:
+        intent = classify_query(req.question)
 
-    # Cross-year: decompose + per-year retrieve (never one mixed retrieval)
-    if intent.question_type == "comparison" and len(intent.fiscal_years) > 1:
-        result = answer_comparison(
+        # Cross-year: decompose + per-year retrieve (never one mixed retrieval)
+        if intent.question_type == "comparison" and len(intent.fiscal_years) > 1:
+            result = answer_comparison(
+                req.question,
+                intent,
+                app.state.vectorstore,
+                app.state.bm25_by_year,
+                app.state.chunk_lookup,
+            )
+            return {"type": "comparison", **result}
+
+        # lookup / explanation / unsupported (unsupported refused inside guardrails)
+        chunks = retrieve(
             req.question,
             intent,
             app.state.vectorstore,
             app.state.bm25_by_year,
             app.state.chunk_lookup,
         )
-        return {"type": "comparison", **result}
+        result = guarded_generate(req.question, chunks, intent)
+        return {"type": "single", "intent": intent.model_dump(), **result}
+    except Exception as e:
+        # Return JSON 500 (with CORS) instead of crashing the worker → opaque 502
+        from fastapi.responses import JSONResponse
 
-    # lookup / explanation / unsupported (unsupported refused inside guardrails)
-    chunks = retrieve(
-        req.question,
-        intent,
-        app.state.vectorstore,
-        app.state.bm25_by_year,
-        app.state.chunk_lookup,
-    )
-    result = guarded_generate(req.question, chunks, intent)
-    return {"type": "single", "intent": intent.model_dump(), **result}
+        print(f"/ask failed: {type(e).__name__}: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"error": type(e).__name__, "detail": str(e)},
+        )
