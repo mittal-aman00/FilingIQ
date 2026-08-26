@@ -1,23 +1,25 @@
-# FilingIQ backend — runtime deps for Render / local API
-fastapi>=0.115.0
-uvicorn[standard]>=0.32.0
-python-dotenv>=1.0.0
-pydantic>=2.0.0
+# Pin to versions known to install on Python 3.12 (Render runtime.txt).
+# Unpinned ">=0.2.0" failed on Render when the default Python was too old/new
+# and pip only saw langchain-pinecone==0.0.1.
 
-# LLM + embeddings
-google-genai>=1.0.0
-groq>=0.11.0
-langchain-core>=0.3.0
-langchain-community>=0.3.0
-langchain-google-genai>=2.0.0
-langchain-pinecone>=0.2.0
-pinecone>=5.0.0
-langchain-text-splitters>=0.3.0
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+python-dotenv==1.1.1
+pydantic==2.11.7
 
-# Retrieval
-rank-bm25>=0.2.2
-flashrank>=0.2.0
+google-genai==1.29.0
+groq==0.30.0
 
-# Parsing (needed if you re-run ingest on the server; safe to include)
-pymupdf4llm>=0.0.17
-pdfplumber>=0.11.0
+langchain-core==0.3.72
+langchain-community==0.3.27
+langchain-google-genai==2.1.8
+langchain-pinecone==0.2.8
+langchain-text-splitters==0.3.9
+pinecone==7.3.0
+
+rank-bm25==0.2.2
+FlashRank==0.2.10
+
+# Optional for ingest scripts; keep light for API boot
+pymupdf4llm==0.0.27
+pdfplumber==0.11.7
