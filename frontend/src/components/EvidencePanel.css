@@ -1,0 +1,239 @@
+.evidence {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-elevated);
+}
+
+.evidence__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.evidence__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.evidence__type {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+}
+
+.evidence__empty {
+  padding: 1.25rem 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.evidence__scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 0.5rem 0.85rem 1.25rem;
+}
+
+.evidence__block {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.evidence__block:last-child {
+  border-bottom: 0;
+}
+
+.evidence__h {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.evidence__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--border);
+}
+.badge--ok {
+  color: var(--green);
+  border-color: #2a6b45;
+  background: rgba(61, 186, 111, 0.08);
+}
+.badge--warn {
+  color: var(--amber);
+  border-color: #7a4a12;
+  background: var(--amber-glow);
+}
+.badge--muted {
+  color: var(--text-muted);
+}
+
+.evidence__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.fy-chip {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: #111;
+  background: var(--amber);
+  padding: 0.15rem 0.4rem;
+}
+
+.evidence__dl {
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.evidence__dl > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+}
+.evidence__dl dt {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-top: 0.15rem;
+}
+.evidence__dl dd {
+  margin: 0;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.amber {
+  color: var(--amber);
+}
+.muted {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.evidence__delta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+.evidence__delta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.evidence__delta .muted {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.evidence__subs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.evidence__subs li {
+  border: 1px solid var(--border);
+  padding: 0.55rem;
+  background: var(--bg);
+}
+.evidence__sub-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.evidence__subs p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.evidence__answer {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.evidence__cites {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.evidence__cites--main {
+  margin-top: 0;
+}
+
+.cite-btn {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.4rem 0.5rem;
+  line-height: 1.35;
+}
+.cite-btn:hover {
+  border-color: var(--amber-dim);
+  background: var(--amber-glow);
+}
+
+.evidence__raw {
+  margin: 0;
+  max-height: 220px;
+  overflow: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  background: #000;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

@@ -1,0 +1,223 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+.chat__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.chat__title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat__tag {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--amber-dim);
+}
+
+.chat__stream {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.chat__empty {
+  margin: auto 0;
+  max-width: 520px;
+}
+
+.chat__empty-lead {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.chat__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.chat__suggestion {
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text);
+  padding: 0.65rem 0.75rem;
+  font-size: 0.82rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.chat__suggestion:hover:not(:disabled) {
+  border-color: var(--amber-dim);
+  background: var(--amber-glow);
+}
+
+.chat__bubble {
+  max-width: 92%;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  padding: 0.65rem 0.75rem;
+}
+.chat__bubble--user {
+  align-self: flex-end;
+  border-color: #333;
+}
+.chat__bubble--assistant {
+  align-self: flex-start;
+  cursor: pointer;
+}
+.chat__bubble--assistant.is-selected {
+  border-color: var(--amber-dim);
+  box-shadow: inset 2px 0 0 var(--amber);
+}
+
+.chat__bubble-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.chat__bubble-body {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.chat__bubble-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.15rem 0.4rem;
+}
+.chip--ok {
+  border-color: #2a6b45;
+  color: var(--green);
+}
+.chip--warn {
+  border-color: #7a4a12;
+  color: var(--amber);
+}
+.chip--amber {
+  border-color: var(--amber-dim);
+  color: var(--amber);
+}
+
+.chat__thinking {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--amber-dim);
+  letter-spacing: 0.04em;
+}
+
+.chat__thinking-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--amber);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.chat__error {
+  margin: 0 1rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #5a2a2a;
+  background: rgba(232, 93, 93, 0.08);
+  color: var(--red);
+  font-size: 0.8rem;
+}
+
+.chat__composer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.chat__composer textarea {
+  resize: none;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  padding: 0.65rem 0.75rem;
+  outline: none;
+  min-height: 56px;
+}
+.chat__composer textarea:focus {
+  border-color: var(--amber-dim);
+}
+
+.chat__composer button {
+  align-self: end;
+  border: 1px solid var(--amber);
+  background: var(--amber);
+  color: #111;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.1rem;
+}
+.chat__composer button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.chat__composer button:not(:disabled):hover {
+  background: transparent;
+  color: var(--amber);
+}

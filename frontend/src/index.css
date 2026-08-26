@@ -1,0 +1,82 @@
+/* FilingIQ — Bloomberg-style terminal theme (black + amber) */
+
+:root {
+  --bg: #050505;
+  --bg-elevated: #0c0c0c;
+  --bg-panel: #101010;
+  --bg-hover: #161616;
+  --bg-input: #0a0a0a;
+  --border: #2a2a2a;
+  --border-strong: #3d3d3d;
+  --amber: #f5a623;
+  --amber-dim: #c4831a;
+  --amber-glow: rgba(245, 166, 35, 0.12);
+  --green: #3dba6f;
+  --red: #e85d5d;
+  --text: #e6e6e6;
+  --text-muted: #8a8a8a;
+  --text-dim: #5c5c5c;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sidebar-w: 260px;
+  --evidence-w: 340px;
+  --radius: 2px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--amber);
+}
+
+::selection {
+  background: var(--amber);
+  color: #000;
+}
+
+/* Scrollbars — thin terminal style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
