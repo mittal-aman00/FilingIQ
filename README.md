@@ -480,14 +480,6 @@ python evaluate.py
 
 ---
 
-## 15. Interview / portfolio talking points
-
-Use this paragraph when explaining the project months later:
-
-> I built FilingIQ — a financial filing analysis system over three years of NVIDIA SEC 10‑Ks. The hard part isn’t “add a vector DB.” Financial meaning lives in tables that naive PDF chunking destroys, so I benchmarked parsers, kept each table as an atomic chunk with section context, and stamped fiscal-year metadata for hard filters. Questions go through intent extraction so period ambiguity cannot silently answer from the wrong year. Retrieval is hybrid BM25 + dense vectors with reciprocal rank fusion and FlashRank re-ranking, scoped per fiscal year. Every number is verified against retrieved context; arithmetic for YoY deltas runs in Python with `Decimal`; citations must map to retrieved pages; and the system refuses rather than guesses. The FastAPI `/ask` path is mirrored by an evaluation harness, and a Bloomberg-style React UI exposes intent, citations, verification, and comparison math for analyst trust.
-
----
-
 <div align="center">
 
 ### FilingIQ
