@@ -50,6 +50,7 @@ _cors_origins = [
     "http://localhost:4173",
     "http://127.0.0.1:4173",
     "https://filing-iq-seven.vercel.app",
+    "https://filing-iq-tlpl.vercel.app",
 ]
 _cors_origins += [
     o.strip()
